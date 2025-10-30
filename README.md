@@ -45,12 +45,11 @@
 
 ## High level solution
 
-    Se propone una solución de una API monolitica construida en PHP/Laravel, siguiendo una arquitectura RESTful. Se usará JWT Tokens para una autenticación segura y eficaz con Bcrypt para manejar las contraseñas, una base de datos relacional (Postgresql o Mariadb), y un servicio Websocket para el manejo de los eventos en tiempo real.
+Se propone una solución de una API monolitica construida en PHP/Laravel, siguiendo una arquitectura RESTful. Se usará JWT Tokens para una autenticación segura y eficaz con Bcrypt para manejar las contraseñas, una base de datos relacional (Postgresql o Mariadb), y un servicio Websocket para el manejo de los eventos en tiempo real.
 
 ## Flow diagram
 
-    NEW MESSAGE
-
+NEW MESSAGE
 graph TD
     A[Start] --> B("Cliente: Hace click 'Enviar'");
     B --> C{"¿Tiene attachment?"};
@@ -97,7 +96,6 @@ graph TD
 
 erDiagram
     %% --- ENTIDADES ---
-
     Workspace {
         int id PK
         string name
