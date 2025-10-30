@@ -95,7 +95,7 @@ graph TD
   	V --> W[End];
 ```
 ## Entity diagram
-` ` `mermaid
+```mermaid
 erDiagram
     %% --- ENTIDADES ---
     Workspace {
@@ -212,7 +212,7 @@ erDiagram
     %% Relaciones de Reaction
     User ||--o{ MessageReaction : "gives (actor)"
     Message ||--o{ MessageReaction : "receives (recipient)"
-` ` `
+```
 ## Epics and Tasks
 
     - EPIC: Módulo de Autenticación y gestión de usuarios
