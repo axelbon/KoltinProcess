@@ -1,0 +1,41 @@
+graph TD
+    A[Start] --> B("Cliente: Hace click 'Enviar'");
+    B --> C{"¿Tiene attachment?"};
+
+    C -- YES --> D["Cliente: Llama a POST /attachments/generate-upload-url"];
+    D --> E["Cliente: Sube archivo a S3"];
+    E --> F["Cliente: Espera URL y la añade al body"];
+    F --> G("Cliente: Llama a POST /channels/{id}/messages");
+    
+    C -- NO --> G; 
+
+    G --> H["Server: Inicia Transacción DB"];
+    
+    subgraph "Server: DB Transaction"
+        direction TB
+        H --> I{"¿Es respuesta de hilo? (tiene parent_message_id)"};
+        
+        I -- YES --> J["Guarda mensaje (con parent_id)"];
+        J --> K["Actualiza 'thread_reply_count' del padre"];
+        K --> L["Prepara evento 'THREAD_RESPONSE'"];
+        
+        I -- NO --> M["Guarda mensaje (con parent_id=null)"];
+        M --> N["Prepara evento 'NEW_MESSAGE'"];
+        
+        L --> O{"¿Tiene mención?"};
+        N --> O;
+        
+        O -- YES --> P["Obtiene usuarios mencionados"];
+        P --> Q["Guarda notificaciones en BD"];
+        Q --> R["Prepara evento 'MENTION'"];
+        
+        R --> S["Commit DB Transaction"];
+        O -- NO --> S;
+    end
+
+    S --> T{"¿Transacción exitosa?"};
+    T -- YES --> U["Server: Envía eventos WebSocket preparados"];
+    T -- NO --> V["Server: Responde Error 500"];
+    
+    U --> W[End];
+    V --> W[End];

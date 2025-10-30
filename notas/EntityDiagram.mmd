@@ -1,0 +1,118 @@
+erDiagram
+    %% --- ENTIDADES ---
+
+    Workspace {
+        int id PK
+        string name
+        string domain
+        datetime created_at
+        datetime updated_at
+        datetime deleted_at
+    }
+
+    User {
+        int id PK
+        string username
+        string email
+        string password
+        int workspace_id FK
+        datetime created_at
+        datetime updated_at
+        datetime deleted_at
+    }
+    
+    Channel {
+        int id PK
+        string name
+        int workspace_id FK
+        bool is_private
+        string description
+        datetime created_at
+        datetime updated_at
+        datetime deleted_at
+    }
+
+    ChannelUser {
+        int id PK
+        int user_id FK
+        int channel_id FK
+        datetime created_at
+        datetime updated_at
+        datetime deleted_at
+    }
+
+    Message {
+        int id PK
+        text body   
+        int user_id FK
+        int channel_id FK
+        int parent_message_id FK "Nullable"
+        int thread_reply_count
+        datetime thread_last_reply_at
+        datetime created_at
+        datetime updated_at
+        datetime deleted_at
+    }
+
+    Attachment {
+        int id PK
+        int message_id FK
+        string file_name
+        string file_type
+        int file_size
+        string file_url
+        int user_id FK
+        datetime created_at
+        datetime updated_at
+        datetime deleted_at
+    }
+
+    Notification {
+        int id PK
+        int recipient_user_id FK
+        int actor_user_id FK
+        string event_type
+        int target_id
+        string target_type
+        datetime read_at
+        datetime created_at
+        datetime updated_at
+        datetime deleted_at
+    }
+
+    MessageReaction {
+        int id PK
+        id message_id FK NOT NULL
+        id user_id FK NOT NULL
+        string reaction_content
+        datetime created_at
+        datetime updated_at
+        datetime deleted_at
+        
+    }
+    
+    %% --- RELACIONES ---
+
+    %% Relaciones del Workspace
+    Workspace ||--o{ User : "hosts"
+    Workspace ||--o{ Channel : "contains"
+
+    %% Relaciones del Usuario
+    User ||--o{ Message : "writes"
+    User ||--o{ Attachment : "uploads"
+    User ||--o{ ChannelUser : "has_memberships"
+
+    %% Relaciones del Canal
+    Channel ||--o{ Message : "has_messages"
+    Channel ||--o{ ChannelUser : "has_members"
+
+    %% Relación auto-referenciada para Hilos (Threads)
+    Message }o--o| Message : "is_reply_to"
+
+    %% Relaciones de Notificación
+    User ||--o{ Notification : "receives (recipient)"
+    User ||--o{ Notification : "triggers (actor)"
+
+    %% Relaciones de Reaction
+    User ||--o{ MessageReaction : "gives (actor)"
+    Message ||--o{ MessageReaction : "receives (recipient)"
