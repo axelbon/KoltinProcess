@@ -50,6 +50,7 @@ Se propone una solución de una API monolitica construida en PHP/Laravel, siguie
 ## Flow diagram
 
 NEW MESSAGE
+
 graph TD
     A[Start] --> B("Cliente: Hace click 'Enviar'");
     B --> C{"¿Tiene attachment?"};
@@ -95,6 +96,7 @@ graph TD
 ## Entity diagram
 
 erDiagram
+
     %% --- ENTIDADES ---
     Workspace {
         int id PK
