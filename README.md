@@ -50,7 +50,7 @@ Se propone una solución de una API monolitica construida en PHP/Laravel, siguie
 ## Flow diagram
 
 NEW MESSAGE
-
+` ` `mermaid
 graph TD
     A[Start] --> B("Cliente: Hace click 'Enviar'");
     B --> C{"¿Tiene attachment?"};
@@ -92,11 +92,10 @@ graph TD
     
     U --> W[End];
     V --> W[End];
-
+` ` `
 ## Entity diagram
-
+` ` `mermaid
 erDiagram
-
     %% --- ENTIDADES ---
     Workspace {
         int id PK
@@ -212,7 +211,7 @@ erDiagram
     %% Relaciones de Reaction
     User ||--o{ MessageReaction : "gives (actor)"
     Message ||--o{ MessageReaction : "receives (recipient)"
-
+` ` `
 ## Epics and Tasks
 
     - EPIC: Módulo de Autenticación y gestión de usuarios
